@@ -45,12 +45,11 @@ class SMBC_card(object):
         self.session.post(
                 self.login_url, data=login_payload, headers=login_header, allow_redirects=True)
 
-    def parse(self, card, year=None, month=None):
+    def parse(self, year=None, month=None):
         """
         Retrieve statement of a credit card on certain time.
         Default value for year and month is current time.
         Args:
-            card: str card id in SMBC website
             year: int e.g. 2016
             month: int e.g. 12
 
@@ -64,7 +63,6 @@ class SMBC_card(object):
 
         payload = self.__create_bill_payload(year, month)
         header = self.__create_header()
-        self.switch_to_card(card)
         r = self.session.post(self.bill_url, data=payload, headers=header)
         return r.text
 
@@ -93,8 +91,11 @@ class SMBC_card(object):
         payload = self.__create_card_list_payload()
         data = self.session.post(self.card_url, data=payload, headers=header)
         data = json.loads(data.text)
-        for card in data['body']['content']['DropdownListInitDisplayServiceBean']['multiCardInfoList']:
-            self.card_list[card['value']] = card['name']
+        try:
+            for card in data['body']['content']['DropdownListInitDisplayServiceBean']['multiCardInfoList']:
+                self.card_list[card['value']] = card['name']
+        except:
+            self.card_list['single'] = data['body']['content']['DropdownListInitDisplayServiceBean']['cardName']
 
     def __create_header(self, header_type=None):
         """

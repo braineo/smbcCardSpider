@@ -22,7 +22,10 @@ class SMBC_bill(object):
         self.__cards.retrieve_card_list()
 
         for card in self.__cards.card_list:
-            statement = self.__cards.parse(card, year, month)
+            if card != 'single':
+                self.__cards.switch_to_card(card)
+            statement = self.__cards.parse(year, month)
+
             data = json.loads(statement)
 
             ret = []

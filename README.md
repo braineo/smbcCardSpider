@@ -21,4 +21,4 @@ a csv file will be created with file name contains year and month e.g. '201210.c
 
 ## ToDo
 1. ~~Crawl statements for all credit cards~~
-2. Handle errors
+2. When there is only one card, no multiCardInfoList in return json data (['body']['content']['DropdownListInitDisplayServiceBean']['multiCardInfoList'])
