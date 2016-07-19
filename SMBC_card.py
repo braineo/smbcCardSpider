@@ -94,10 +94,11 @@ class SMBC_card(object):
         try:
             for card in data['body']['content']['DropdownListInitDisplayServiceBean']['multiCardInfoList']:
                 self.card_list[card['value']] = card['name']
-        except:
+        except KeyError:
             self.card_list['single'] = data['body']['content']['DropdownListInitDisplayServiceBean']['cardName']
 
-    def __create_header(self, header_type=None):
+    @staticmethod
+    def __create_header(header_type=None):
         """
         Actually wrong referer would not stop you from logging in or getting the statement.
         Just wanted to make it look like a real request.
@@ -120,7 +121,8 @@ class SMBC_card(object):
 
         return header
 
-    def __custom_timestamp(self):
+    @staticmethod
+    def __custom_timestamp():
         """
         Get current unix time
         Returns: str unix time
